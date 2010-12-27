@@ -1,0 +1,216 @@
+/*************************************
+   WELCOME TO THE CUSTOM STYLESHEET
+--------------------------------------
+              style.css
+        BlueTrip CSS Framework
+    Put your custom styles in here.
+***************************************/
+
+/**************************************/
+/*           COLOR SCHEME             */
+/**************************************
+- black		#000
+- white		#fff
+-           #
+-           #
+-           #
+***************************************/
+
+
+/**************************************/
+/*              GLOBALS               */
+/**************************************/
+html {
+	background-color: #EDE8E3;
+}
+body {
+	margin: 0 !important;	
+}
+body .container {
+	color: #444444;
+}
+#header a,
+#content a,
+#footer a {
+	text-decoration: none;
+}
+
+/**************************************/
+/*              HEADER                */
+/**************************************/
+#header {
+	background: none repeat scroll 0 0 #332C22;
+	border-bottom: 10px solid #DAD0C7;
+	padding-top: 10px;
+	width: 100%;
+}
+#head-top {
+	float: left;
+	width: 950px;
+	margin-bottom: 10px;
+}
+#head-top h1 {
+	margin: 0.5em 0;
+}
+#head-top h1,
+#head-top h1 a,
+#head-top h1 a:hover {
+	color: #FFCC33 !important;
+	float: left;
+	width: 470px;
+	padding: 0;
+}
+#head-top h1 a {
+	text-decoration: none;
+}
+#head-top h1 span {
+	display: block;
+	font-size: 0.6em;
+	margin-top: 0.2em;
+	float: left;
+	width: 470px;
+	color: #BBAA99;
+}
+#user-bar {
+	float: left;
+	width: 470px;
+	padding: 35px 0 0 0;
+	margin: 0;
+	color: #BBAA99;
+	font-family: Helvetica,Arial,sans-serif;
+	text-align: right;
+}
+#user-bar a {
+	color: #4499AA;
+	text-decoration: none;
+}
+#user-bar a:hover {
+	color: #993333 !important;
+}
+/**************************************/
+/*             NAVIGATION             */
+/**************************************/
+#head-nav {
+	background: url("../images/head-navbg.png") repeat scroll 0 0 transparent;
+	height: 5.26em;
+}
+#head-nav ul {
+	padding: 5px 0 0 0;
+	margin: 0;
+	float: left;
+	width: 950px;
+	list-style-type: none;
+}
+#head-nav li {
+	width: auto;
+	float: left;
+	list-style: none outside none;
+	margin: 0;
+	padding: 0 2em 0 0;
+	text-indent: 0;
+	text-transform: lowercase;
+	width: 12em;
+}
+#head-nav a {
+	color: #975;
+	display: block;
+	line-height: 1.25;
+	padding-bottom: 1em;
+	text-decoration: none;
+}
+#head-nav li.selected a {
+	background:url("../images/head-navselected.gif") no-repeat scroll 0 100% transparent;	
+}
+#head-nav a:hover,
+#head-nav li.selected a {
+	color: #ca8;
+}
+#head-nav a strong {
+	display: block;
+	font-size: 1.2em;
+	color: #ba9;
+}
+#head-nav a:hover strong,
+#head-nav li.selected a strong {
+	color: #fff;
+}
+
+/** Topic hierarchy menu **/
+ul#topic_hierarchy {
+	list-style-type: none;
+	padding: 0;
+	margin: 0;
+	font-size: 1.15em;
+	line-height: 1.5em;
+	margin-bottom: 0.9em;
+}
+ul#topic_hierarchy li {
+	background: transparent url(../images/app-icons/bullet_arrow_up.png) no-repeat 0px 2px;
+	padding-left: 1.15em;
+	margin-left: 0;
+	padding-bottom: 0.3em;
+	margin-bottom: 0.3em;
+	border-bottom: dotted 1px #dddddd;
+}
+
+/** Topic group menu **/
+ul#topic_group a {
+	text-decoration: none;
+}
+li.currently-viewed a {
+	color: #c33;
+	font-weight: bold;
+}
+/**************************************/
+/*            MAIN CONTENT            */
+/**************************************/
+#content {
+	width: 100%;
+	background-color: #fff;
+	padding: 20px 0;
+}
+#content h1 {
+	color: #777777;
+	font-size: 1.5em;
+	font-weight: normal;
+	margin: 0 0 1.5em 0;
+	text-transform: none;
+}
+#content h1 strong {
+	color: #222222;
+	font-weight: normal;
+}
+#form-wrapper {
+	border-top: 1px solid #ECE9E6;
+	float: left;
+	padding-top: 1.7em;	
+}
+/**************************************/
+/*               FOOTER               */
+/**************************************/
+#footer {
+	background: none repeat scroll 0 0 #EDE8E3;
+	width: 100%;
+}
+#footer a {
+	color: #999999;
+}
+#footer a:hover {
+	color: #780c0c;
+}
+#footer .container {
+	padding-top: 20px;
+}
+#foot_nav {
+	text-align: center;
+}
+#foot_nav ul {
+	list-style-type: none;
+	margin: 0.6em 0;
+}
+#foot_nav li {
+	display: inline;
+}
+#foot_nav li:first-child {
+	margin-left: 0;
+}

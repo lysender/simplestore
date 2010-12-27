@@ -1,0 +1,95 @@
+/** Table list for CRUD **/
+div.reglist-w {
+	clear: both;
+	width: 100%;
+	background-color: #CDCDCD;
+	margin: 0 0 15px;	
+}
+table.reg-list {
+	border-collapse: separate;
+	border-spacing: 1px !important;
+	font-family:arial;
+	margin:0;
+	width: 100%;
+	text-align: left;
+	border: 0;
+}
+table.reg-list thead tr,
+table.reg-list tfoot tr {
+	background-color: #e6EEEE;
+	border: 1px solid #FFF;	
+}
+table.reg-list th {
+	padding: 4px;
+	font-weight: bold;		
+}
+table.reg-list th,
+table.reg-list td {
+	border: 1px solid #FFF;
+}
+table.reg-list thead tr .header {
+	background-image: url(../images/sorter/bg.gif);
+	background-repeat: no-repeat;
+	background-position: center right;
+	cursor: pointer;
+}
+table.reg-list tbody tr {
+	background-color: #FFF;
+}
+table.reg-list tbody td {
+	color: #3D3D3D;
+	padding: 4px;
+	vertical-align: middle;
+}
+table.reg-list tbody tr.odd {
+	background-color:#F0F0F6;
+}
+table.reg-list tbody tr:hover {
+	background-color: #ffc;
+}
+table.reg-list thead tr .headerSortUp {
+	background-image: url(../images/sorter/asc.gif);
+}
+table.reg-list thead tr .headerSortDown {
+	background-image: url(../images/sorter/desc.gif);
+}
+table.reg-list thead tr .headerSortDown, table.reg-list thead tr .headerSortUp {
+	background-color: #8dbdd8;
+}
+/** Result specific styles **/
+
+table.reg-list .t-center {
+	text-align: center;
+}
+
+.crud-add {
+	float: right;
+	width: 150px;
+	text-align: right;
+}
+.crud-add a {
+	background: transparent url(../images/app-icons/add.png) no-repeat center left;
+	padding-left: 20px;		
+}
+
+/** Row controls an buttons **/
+table.reg-list tbody td.crud-edit, 
+table.reg-list tbody td.crud-delete {
+	text-align: center;
+}
+td.crud-edit a,
+td.crud-delete a {
+	display: block;
+	margin: 0 auto;
+	padding: 0;
+	width: 16px;
+	height: 16px;
+	text-decoration: none;
+	text-indent: -3000px;
+}
+td.crud-edit a {
+	background: transparent url(../images/app-icons/application_edit.png) no-repeat center left;
+}
+td.crud-delete a {
+	background: transparent url(../images/app-icons/delete.png) no-repeat center left;
+}

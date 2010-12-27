@@ -214,3 +214,16 @@ li.currently-viewed a {
 #foot_nav li:first-child {
 	margin-left: 0;
 }
+
+/** Per page styles **/
+#form-wrapper input[type='submit'] {
+	padding:0.3em 0.4em 0.15em;
+}
+#form-wrapper input[type='text'],
+#form-wrapper input[type='password'] {
+	width: 150px;	
+}
+#form-wrapper textarea {
+	width: 350px;
+	height: 52px;	
+}

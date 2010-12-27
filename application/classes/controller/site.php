@@ -39,6 +39,8 @@ abstract class Controller_Site extends Controller_Template
 	 */
 	protected $_no_auth = FALSE;
 	
+	protected $_headnav_class = ' class="selected"';
+	
 	/** 
 	 * before()
 	 *
@@ -68,6 +70,9 @@ abstract class Controller_Site extends Controller_Template
 			// Initialize head_scripts and head_readyscripts
 			$this->template->head_scripts = '';
 			$this->template->head_readyscripts = '';
+			
+			// Set head nav selected
+			View::set_global('headnav_class', $this->_current_headnav());
 		}
 		
 		// Initialize session
@@ -80,7 +85,7 @@ abstract class Controller_Site extends Controller_Template
 		
 		if ($user && $this->auto_render)
 		{
-			$this->template->set_global('current_user', $user->username);
+			View::set_global('current_user', $user->username);
 		}
 		
 		// Redirect to login for unauthenticated users
@@ -173,5 +178,34 @@ abstract class Controller_Site extends Controller_Template
 			
 			$this->_page_setfocus($first_error);
 		}
+	}
+	
+	/** 
+	 * Returns the current stats for head nav
+	 * 
+	 * @return array
+	 */
+	protected function _current_headnav()
+	{
+		$stats = array(
+			'dashboard' => '',
+			'inventory' => '',
+			'sales' => '',
+			'report' => '',
+			'security' => ''
+		);
+		
+		$dir = $this->request->directory;
+		
+		if ($dir && isset($stats[$dir]))
+		{
+			$stats[$dir] = $this->_headnav_class;
+		}
+		else
+		{
+			$stats['dashboard'] = $this->_headnav_class;
+		}
+		
+		return $stats;
 	}
 }

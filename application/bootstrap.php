@@ -129,9 +129,39 @@ Route::set('cron', 'cron(/<controller>(/<action>(/<id>(/<param2>(/<param3>)))))'
 /** 
  * Router for inventory group of pages
  */
-Route::set('inventory', 'inventory()')
+Route::set('inventory', 'inventory(/<controller>(/<action>(/<id>(/<param2>(/<param3>)))))')
 	->defaults(array(
 		'directory'	 => 'inventory',
+		'controller' => 'index',
+		'action' 	 => 'index'
+	));
+	
+/** 
+ * Router for sales group of pages
+ */
+Route::set('sales', 'sales(/<controller>(/<action>(/<id>(/<param2>(/<param3>)))))')
+	->defaults(array(
+		'directory'	 => 'sales',
+		'controller' => 'index',
+		'action' 	 => 'index'
+	));
+	
+/** 
+ * Router for sales group of pages
+ */
+Route::set('report', 'report(/<controller>(/<action>(/<id>(/<param2>(/<param3>)))))')
+	->defaults(array(
+		'directory'	 => 'report',
+		'controller' => 'index',
+		'action' 	 => 'index'
+	));
+	
+/** 
+ * Router for sales group of pages
+ */
+Route::set('security', 'security(/<controller>(/<action>(/<id>(/<param2>(/<param3>)))))')
+	->defaults(array(
+		'directory'	 => 'security',
 		'controller' => 'index',
 		'action' 	 => 'index'
 	));
@@ -146,6 +176,11 @@ Route::set('default', '(<controller>(/<action>(/<id>)))')
 		'action'     => 'index',
 	));
 
+/** 
+ * Cache the routes
+ */
+Route::cache(TRUE);
+	
 /**
  * Execute the main request using PATH_INFO. If no URI source is specified,
  * the URI will be automatically detected.

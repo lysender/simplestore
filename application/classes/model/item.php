@@ -8,12 +8,21 @@
  */
 class Model_Item extends Sprig
 {
+	const ITEMS_PER_PAGE = 50;
+	
 	/** 
 	 * Table name
 	 * 
 	 * @var string
 	 */
 	protected $_table = 'item';
+	
+	/** 
+	 * Count for pagination
+	 * 
+	 * @var int
+	 */
+	protected $_total_count;
 	
 	/** 
 	 * Initialize
@@ -26,7 +35,8 @@ class Model_Item extends Sprig
 		$this->_fields = array(
 			'id' 		=> new Sprig_Field_Auto,
 			'category'	=> new Sprig_Field_BelongsTo(array(
-				'empty' => TRUE,
+				'null'	=> FALSE,
+				'empty' => FALSE,
 				'column' => 'category_id',
 				'model' => 'category',
 				'attributes' => array(
@@ -35,14 +45,18 @@ class Model_Item extends Sprig
 			)),
 			'code_name' => new Sprig_Field_Char(array(
 				'unique' => TRUE,
+				'null' => TRUE,
 				'label' => 'Code name',
 				'min_length' => 3,
 				'max_length' => 16,
 				'rules' => array(
-					'alpha_numeric' => NULL
+					'alpha_dash' => NULL
 				),
 				'attributes' => array(
 					'id' => 'code_name'
+				),
+				'callbacks' => array(
+					'generate_codename' => array($this, 'generate_codename')
 				)
 			)),
 			'name' => new Sprig_Field_Char(array(
@@ -74,6 +88,31 @@ class Model_Item extends Sprig
 				'null' => TRUE
 			))
 		);
+	}
+	
+	/** 
+	 * Callback filter for generating codename
+	 * 
+	 * @param Validate $array
+	 * @param string $field
+	 */
+	public function generate_codename(Validate $array, $field)
+	{
+		// Check if code_name has content
+		$code_name = $array[$field];
+		
+		if ( ! $code_name)
+		{
+			// Generate from item name
+			$name = isset($array['name']) ? $array['name'] : NULL;
+
+			if ($name)
+			{
+				$code_name = strtoupper(preg_replace('/[^-a-zA-Z0-9]/', '', $name));
+			}
+		}
+		
+		$array[$field] = Text::limit_chars($code_name, 16);
 	}
 	
 	/**
@@ -128,8 +167,18 @@ class Model_Item extends Sprig
 	 */
 	public function get_all()
 	{
-		$result = DB::select()->from($this->_table)
-			->order_by('name', 'ASC')
+		$result = DB::select(
+				'i.id',
+				'i.category_id', 
+				array('c.name', 'category_name'),
+				'i.code_name',
+				'i.name',
+				'i.description'
+			)
+			->from(array($this->_table, 'i'))
+			->join(array('category', 'c'))
+			->on('i.category_id', '=', 'c.id')
+			->order_by('i.name', 'ASC')
 			->execute();
 			
 		if ($result)
@@ -143,5 +192,111 @@ class Model_Item extends Sprig
 		}
 		
 		return FALSE;
+	}
+	
+	/**
+	 * Returns paginated item records
+	 *
+	 * @param int $category_id
+	 * @param int $page
+	 * @param string $sort
+	 * @return array
+	 */
+	public function get_paged($category_id = NULL, $page = 1, $sort = 'ASC')
+	{		
+		$page = (int) $page;
+		
+		// Pre calculate totals
+		$total_rec = $this->get_total($category_id);
+		$total_pages = $this->get_total_pages($total_rec);
+		
+		// Determine the correct page
+		if ($page < 1)
+		{
+			$page = 1;
+		}
+		
+		// Make sure the page does not exceed total pages
+		if ($page > $total_pages)
+		{
+			$page = $total_pages;
+		}
+		
+		$offset = ($page - 1) * self::ITEMS_PER_PAGE;
+		
+		// Set limit and offset and execute
+		$query = DB::select(
+				'i.id',
+				'i.category_id', 
+				array('c.name', 'category_name'),
+				'i.code_name',
+				'i.name',
+				'i.description'
+			)
+			->from(array($this->_table, 'i'))
+			->join(array('category', 'c'))
+			->on('i.category_id', '=', 'c.id');
+			
+		if ($category_id)
+		{
+			$query->where('i.category_id', '=', $category_id);
+		}
+			
+		$result = $query->order_by('c.name', 'ASC')
+			->order_by('i.name', 'ASC')
+			->limit(self::ITEMS_PER_PAGE)
+			->offset($offset)
+			->execute();
+		
+		if ( ! empty($result))
+		{
+			return $result->as_array();
+		}
+		
+		return FALSE;
+	}
+	
+	/**
+	 * Returns the total number of shows
+	 *
+	 * @param string $cat
+	 * @return int
+	 */
+	public function get_total($category_id = NULL)
+	{
+		if ($this->_total_count === NULL)
+		{
+			$query = DB::select('COUNT("*") AS show_total_count')
+				->from($this->_table);
+				
+			if ($category_id)
+			{
+				$query->where('category_id', '=', $category_id);
+			}
+			
+			$this->_total_count = $query->execute()
+				->get('show_total_count');
+		}
+		
+		return $this->_total_count;
+	}
+	
+	/**
+	 * Returns the total number of pages
+	 * for a given total record count
+	 *
+	 * @param int $total_rec
+	 * @return int
+	 */
+	function get_total_pages($total_rec)
+	{
+		$ret = ceil($total_rec / self::ITEMS_PER_PAGE);
+		
+		if ($ret > 0)
+		{
+			return (int) $ret;
+		}
+		
+		return 1;
 	}
 }

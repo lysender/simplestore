@@ -165,7 +165,7 @@ class Controller_Inventory_Category extends Controller_Site
 	 */
 	public function action_delete()
 	{
-		// Only allow delete via POST methos
+		// Only allow delete via POST method
 		$delete_params = Arr::extract($_POST, array('referer', 'target'));
 		
 		if ($delete_params['referer'] === NULL || $delete_params['target'] === NULL)
@@ -174,7 +174,7 @@ class Controller_Inventory_Category extends Controller_Site
 			
 			$this->template->title = 'Delete category';
 			
-			$this->view->delete_subject = 'school';
+			$this->view->delete_subject = 'category';
 			$this->view->delete_referer = URL::site('/inventory/category');
 			$this->view->delete_target = URL::site('/inventory/category/delete/'.$this->_category->id);
 			

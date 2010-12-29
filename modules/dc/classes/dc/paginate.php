@@ -22,6 +22,14 @@ class Dc_Paginate
 	
 	public $show_total = TRUE;
 	
+	/** 
+	 * When false, does not show page number on the link
+	 * for the first page
+	 * 
+	 * @var unknown_type
+	 */
+	public $verbose_first_page = FALSE;
+	
 	/**
 	 * Renders a pagination links. Only renders the nearest {$page_page}
 	 * links to the current page
@@ -106,7 +114,7 @@ class Dc_Paginate
 			else
 			{
 				$url = NULL;
-				if ($x == 1)
+				if ($x == 1 && ! $this->verbose_first_page)
 				{
 					$url = URL::site($base_url);
 				}

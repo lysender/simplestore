@@ -6,7 +6,7 @@
 	<?php if (isset($error_message) && $error_message): ?>
 	<p class=error><?php echo $error_message ?></p>
 	<?php endif ?>
-	<form action="<?php echo URL::site('/inventory/item/add') ?>" method="post" enctype="multipart/form-data">
+	<form action="<?php echo URL::site('/inventory/item/edit/'.$item->id) ?>" method="post" enctype="multipart/form-data">
 		<div class="span-3"><?php echo $item->label('category') ?></div>
 		<div class="span-10 last"><?php echo $item->input('category') ?></div>
 			
@@ -20,6 +20,6 @@
 		<div class="span-10 last"><?php echo $item->input('description') ?></div>
 		
 		<div class="span-3">&nbsp;<?php echo Form::hidden('csrf', Security::token(TRUE)) ?></div>
-		<div class="span-10 last"><input type="submit" id="submit" name="submit" value="Add" /></div>
+		<div class="span-10 last"><input type="submit" id="submit" name="submit" value="Update" /></div>
 	</form>
 </div>

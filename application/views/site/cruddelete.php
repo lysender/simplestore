@@ -1,7 +1,7 @@
+<h1><strong>Delete</strong> <?php echo $delete_subject ?></h1>
+
 <div id="form-wrapper" class="span-14 last">
 	<p class="menu-nav"><a href="<?php echo $delete_referer ?>">Back to list</a></p>
-	
-	<h2 class="thin">Delete <?php echo $delete_subject ?></h2>
 	
 	<div id="form_wrapper" class="span-14 last">
 		<?php if (isset($error_message) && $error_message): ?>

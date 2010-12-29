@@ -4,6 +4,8 @@ class Model_Category extends Sprig
 {
 	protected $_table = 'category';
 	
+	protected $_sorting = array('name' => 'ASC');
+	
 	protected function _init()
 	{
 		$this->_fields = array(

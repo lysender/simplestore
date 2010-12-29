@@ -20,12 +20,19 @@
 	<p class="crud-add"><a href="<?php echo URL::site('/inventory/item/add') ?>">Add item</a></p>
 </div>
 
+<div class="span-24">
+	<p>
+		<label>Display: </label>
+		<?php echo Form::select('category_selector', $categories, $selected_category, array('id' => 'category_selector')) ?>
+	</p>
+</div>
+
 <div class="reglist-w">
 	<table class="reg-list">
 		<thead>
 			<tr>
 				<th>&nbsp;</th>
-				<th>Code Name</th>
+				<th>Category</th>
 				<th>Name</th>
 				<th>Description</th>
 				<th>&nbsp;</th>
@@ -36,7 +43,7 @@
 		<?php foreach ($items as $key => $row): ?>
 			<tr>
 				<td class="crud-edit"><a href="<?php echo URL::site('/inventory/item/edit/'.$row['id']) ?>">Edit</a></td>
-				<td><?php echo HTML::chars($row['code_name']) ?></td>
+				<td><?php echo HTML::chars($row['category_name']) ?></td>
 				<td><?php echo HTML::chars($row['name']) ?></td>
 				<td><?php echo HTML::chars($row['description']) ?> &nbsp;</td>
 				<td class="crud-delete"><a href="<?php echo URL::site('/inventory/item/delete/'.$row['id']) ?>">Delete</a></td>

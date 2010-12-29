@@ -66,7 +66,7 @@ class Controller_Inventory_Item extends Controller_Site
 		// Reuse route id as page
 		$page = Arr::get($_GET, 'page');
 		
-		//Reuse route id as category
+		// Reuse route id as category
 		$category_id = $this->request->param('id');
 		
 		$this->view->items = $item->get_paged($category_id, $page);

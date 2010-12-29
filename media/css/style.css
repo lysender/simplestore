@@ -227,3 +227,36 @@ li.currently-viewed a {
 	width: 350px;
 	height: 52px;	
 }
+
+p.category-filter {
+	margin-bottom: 0.5em;
+}
+p.ctrl-tight {
+	margin-bottom: 0.5em;
+}
+.price-edit-form h2 {
+	margin: 0 0 0.8em 0;	
+}
+#item-price-editform {
+	display: none;
+}
+
+a.search-select-price {
+	display: block;
+	height: 16px;
+	margin: 0px auto;
+	padding: 0px;
+	text-decoration: none;
+	text-indent: -3000px;
+	width: 16px;
+	background: transparent url(../images/app-icons/application_go.png) no-repeat center left;
+}
+
+#item-price-editform #submit-spinner {
+	margin-top: 5px;
+	display: none;
+}
+
+td.price-cell {
+	text-align: right;	
+}

@@ -1,4 +1,4 @@
-<h1><strong>Item</strong> Masterlist</h1>
+<h1><strong>Stock</strong> List</h1>
 
 <p class="menu-nav"><a href="<?php echo URL::site('/inventory') ?>">Back to Inventory</a></p>
 
@@ -16,16 +16,7 @@
 <?php endif ?>&nbsp;
 </div>
 
-<div class="span-4 last">
-	<p class="crud-add ctrl-tight"><a href="<?php echo URL::site('/inventory/item/add') ?>">Add item</a></p>
-</div>
-
-<div class="span-24">
-	<p class="category-filter">
-		<label>Display: </label>
-		<?php echo Form::select('category_selector', $categories, $selected_category, array('id' => 'category_selector')) ?>
-	</p>
-</div>
+<div class="span-4 last">&nbsp;</div>
 
 <div class="reglist-w">
 	<table class="reg-list">
@@ -35,6 +26,7 @@
 				<th>Category</th>
 				<th>Name</th>
 				<th>Description</th>
+				<th>Qty</th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
@@ -46,6 +38,7 @@
 				<td><?php echo HTML::chars($row['category_name']) ?></td>
 				<td><?php echo HTML::chars($row['name']) ?></td>
 				<td><?php echo HTML::chars($row['description']) ?> &nbsp;</td>
+				<td><?php echo HTML::chars($row['quantity']) ?> &nbsp;</td>
 				<td class="crud-delete"><a href="<?php echo URL::site('/inventory/item/delete/'.$row['id']) ?>">Delete</a></td>
 			</tr>
 		<?php endforeach ?>

@@ -6,7 +6,7 @@
  * @author lysender
  *
  */
-class Model_Item extends Sprig
+class Model_Stock extends Sprig
 {
 	const ITEMS_PER_PAGE = 50;
 	
@@ -15,7 +15,7 @@ class Model_Item extends Sprig
 	 * 
 	 * @var string
 	 */
-	protected $_table = 'item';
+	protected $_table = 'stock';
 	
 	/** 
 	 * Count for pagination
@@ -34,48 +34,18 @@ class Model_Item extends Sprig
 	{
 		$this->_fields = array(
 			'id' 		=> new Sprig_Field_Auto,
-			'category'	=> new Sprig_Field_BelongsTo(array(
+			'item'	=> new Sprig_Field_BelongsTo(array(
 				'null'	=> FALSE,
 				'empty' => FALSE,
-				'column' => 'category_id',
-				'model' => 'category',
+				'column' => 'item_id',
+				'model' => 'item',
 				'attributes' => array(
-					'id' => 'category'
+					'id' => 'item'
 				)
 			)),
-			'code_name' => new Sprig_Field_Char(array(
-				'unique' => TRUE,
-				'null' => TRUE,
+			'quantity' => new Sprig_Field_Integer(array(
 				'label' => 'Code name',
-				'min_length' => 3,
-				'max_length' => 16,
-				'rules' => array(
-					'alpha_dash' => NULL
-				),
-				'attributes' => array(
-					'id' => 'code_name'
-				),
-				'callbacks' => array(
-					'generate_codename' => array($this, 'generate_codename')
-				)
-			)),
-			'name' => new Sprig_Field_Char(array(
-				'unique' => TRUE,
-				'label' => 'Name',
-				'min_length' => 3,
-				'max_length' => 64,
-				'attributes' => array(
-					'id' => 'name'
-				)
-			)),
-			'description' => new Sprig_Field_Text(array(
-				'empty' => TRUE,
-				'label' => 'Description',
-				'min_length' => 5,
-				'max_length' => 256,
-				'attributes' => array(
-					'id' => 'description'
-				)
+				'default' => 0
 			)),
 			'date_created' => new Sprig_Field_Timestamp,
 			'created_by' => new Sprig_Field_Integer(),
@@ -88,31 +58,6 @@ class Model_Item extends Sprig
 				'null' => TRUE
 			))
 		);
-	}
-	
-	/** 
-	 * Callback filter for generating codename
-	 * 
-	 * @param Validate $array
-	 * @param string $field
-	 */
-	public function generate_codename(Validate $array, $field)
-	{
-		// Check if code_name has content
-		$code_name = $array[$field];
-		
-		if ( ! $code_name)
-		{
-			// Generate from item name
-			$name = isset($array['name']) ? $array['name'] : NULL;
-
-			if ($name)
-			{
-				$code_name = strtoupper(preg_replace('/[^-a-zA-Z0-9]/', '', $name));
-			}
-		}
-		
-		$array[$field] = Text::limit_chars($code_name, 16);
 	}
 	
 	/**
@@ -222,14 +167,17 @@ class Model_Item extends Sprig
 		
 		// Set limit and offset and execute
 		$query = DB::select(
-				'i.id',
+				's.id',
+				's.item_id',
 				'i.category_id', 
 				array('c.name', 'category_name'),
 				'i.code_name',
 				'i.name',
 				'i.description'
 			)
-			->from(array($this->_table, 'i'))
+			->from(array($this->_table, 's'))
+			->join(array('item', 'i'))
+			->on('s.item_id', '=', 'i.id')
 			->join(array('category', 'c'))
 			->on('i.category_id', '=', 'c.id');
 			
@@ -284,7 +232,7 @@ class Model_Item extends Sprig
 	 * @param int $total_rec
 	 * @return int
 	 */
-	public function get_total_pages($total_rec)
+	function get_total_pages($total_rec)
 	{
 		$ret = ceil($total_rec / self::ITEMS_PER_PAGE);
 		
@@ -294,53 +242,5 @@ class Model_Item extends Sprig
 		}
 		
 		return 1;
-	}
-	
-	/** 
-	 * Searches an item including price
-	 * 
-	 * @param string $keyword
-	 * @param int $limit
-	 */
-	public function search_with_price($keyword, $limit = 10, $relative_date = NULL)
-	{
-		if ( ! $relative_date)
-		{
-			$relative_date = time();
-		}
-		
-		$sql = "
-			SELECT
-				i.id,
-				i.name,
-				i.description,
-				i.category_id,
-				p.id AS price_id,
-				p.price,
-				p.effective_date
-			FROM
-				$this->_table AS i
-			LEFT JOIN
-				price AS p on p.id = (
-					SELECT
-						id
-					FROM
-						price
-					WHERE
-						item_id = i.id AND
-						effective_date <= $relative_date
-					ORDER BY
-						effective_date DESC
-					LIMIT 1
-				)
-			WHERE
-				i.name LIKE '%$keyword%' OR
-				i.description LIKE '%$keyword%'
-			ORDER BY
-				i.name ASC
-			LIMIT $limit
-		";
-		
-		return DB::query(Database::SELECT, $sql)->execute()->as_array();
 	}
 }

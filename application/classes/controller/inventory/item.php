@@ -15,6 +15,11 @@ class Controller_Inventory_Item extends Controller_Site
 	 */
 	protected $_item;
 	
+	/** 
+	 * @var int
+	 */
+	protected $_category_id;
+	
 	/**
 	 * Ensures the edit/delete accepts only valid requests
 	 *  
@@ -46,6 +51,24 @@ class Controller_Inventory_Item extends Controller_Site
 			
 			$this->_item = $item;
 		}
+		
+		// Initialize selected category if present
+		// Reuse route id as category
+		if ($this->_category_id = $this->request->param('id'))
+		{
+			$this->session->set('selected_category', $this->_category_id);
+		}
+		else
+		{
+			if (in_array($this->request->action, array('edit', 'delete')))
+			{
+				$this->_category_id = $this->session->get('selected_category');
+			}
+			else 
+			{
+				$this->session->delete('selected_category');
+			}
+		}
 	}
 	
 	/** 
@@ -66,29 +89,26 @@ class Controller_Inventory_Item extends Controller_Site
 		// Reuse route id as page
 		$page = Arr::get($_GET, 'page');
 		
-		// Reuse route id as category
-		$category_id = $this->request->param('id');
-		
-		$this->view->items = $item->get_paged($category_id, $page);
+		$this->view->items = $item->get_paged($this->_category_id, $page);
 		
 		// Load categories
 		$categories = Sprig::factory('category')->select_list('id', 'name');
 		$categories = Arr::merge(array('' => 'All'), $categories);
 
 		$this->view->categories = $categories;
-		$this->view->selected_category = $category_id;
+		$this->view->selected_category = $this->_category_id;
 		
 		// Pagination
 		$paginate = new Dc_Paginate;
 		
-		if ($category_id)
+		if ($this->_category_id)
 		{
 			$paginate->verbose_first_page = TRUE;
 		}
 		
 		$this->view->paginator = $paginate->render(
 			('/inventory/item'),
-			('/inventory/item/index/'.($category_id ? $category_id : '').'?page='),
+			('/inventory/item/index/'.($this->_category_id ? $this->_category_id : '').'?page='),
 			$item->get_total(),
 			Model_Item::ITEMS_PER_PAGE,
 			$page
@@ -107,6 +127,12 @@ class Controller_Inventory_Item extends Controller_Site
 		$item = Sprig::factory('item');
 		$csrf_check = TRUE;
 		
+		if ($this->_category_id)
+		{
+			// Load category as default
+			$item->category = $this->_category_id;
+		}
+		
 		if (Request::$method == 'POST')
 		{
 			$item->values($_POST);
@@ -118,7 +144,7 @@ class Controller_Inventory_Item extends Controller_Site
 					$item->create();
 					
 					$this->session->set('success_message', 'A new item has been added');
-					$this->request->redirect('/inventory/item');
+					$this->request->redirect('/inventory/item'.($this->_category_id ? '/index/'.$this->_category_id : ''));
 				}
 				catch (Validate_Exception $e)
 				{
@@ -140,6 +166,7 @@ class Controller_Inventory_Item extends Controller_Site
 		}
 		
 		$this->view->item = $item;
+		$this->view->selected_category = $this->_category_id;
 	}
 	
 	/** 
@@ -150,6 +177,12 @@ class Controller_Inventory_Item extends Controller_Site
 	{
 		$this->view = View::factory('inventory/item/edit');
 		$this->template->title = 'Item - Edit';
+		
+		if ($this->_category_id)
+		{
+			// Load category as default
+			$this->_item->category = $this->_category_id;
+		}
 		
 		$csrf_check = TRUE;
 		
@@ -164,7 +197,7 @@ class Controller_Inventory_Item extends Controller_Site
 					$this->_item->update();
 					
 					$this->session->set('success_message', 'Item has been updated');
-					$this->request->redirect('/inventory/item');
+					$this->request->redirect('/inventory/item'.($this->_category_id ? '/index/'.$this->_category_id : ''));
 				}
 				catch (Validate_Exception $e)
 				{
@@ -186,6 +219,7 @@ class Controller_Inventory_Item extends Controller_Site
 		}
 		
 		$this->view->item = $this->_item;
+		$this->view->selected_category = $this->_category_id;
 	}
 	
 	/** 

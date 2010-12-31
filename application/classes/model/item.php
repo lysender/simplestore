@@ -309,38 +309,110 @@ class Model_Item extends Sprig
 			$relative_date = time();
 		}
 		
-		$sql = "
-			SELECT
-				i.id,
-				i.name,
-				i.description,
-				i.category_id,
-				p.id AS price_id,
-				p.price,
-				p.effective_date
-			FROM
-				$this->_table AS i
-			LEFT JOIN
-				price AS p on p.id = (
-					SELECT
-						id
-					FROM
-						price
-					WHERE
-						item_id = i.id AND
-						effective_date <= $relative_date
-					ORDER BY
-						effective_date DESC
-					LIMIT 1
-				)
-			WHERE
-				i.name LIKE '%$keyword%' OR
-				i.description LIKE '%$keyword%'
-			ORDER BY
-				i.name ASC
-			LIMIT $limit
-		";
+		// Inner query to latest price per item
+		$inner_query = DB::select('id')->from('price')
+			->where('item_id', '=', DB::expr('i.id'))
+			->where('effective_date', '<=', (int) $relative_date)
+			->order_by('effective_date', 'DESC')
+			->limit(1);
+			
+		// Outer query
+		$query = DB::select(
+				'i.id',
+				'i.name',
+				'i.description',
+				'i.category_id',
+				array('p.id', 'price_id'),
+				'p.price',
+				'p.effective_date'
+			)
+			->from(array($this->_table, 'i'))
+			->join(array('price', 'p'), 'LEFT')
+			->on('p.id', '=', $inner_query)
+			->where('i.name', 'LIKE', '%'.$keyword.'%')
+			->or_where('i.description', 'LIKE', '%'.$keyword.'%')
+			->order_by('i.name', 'ASC')
+			->limit($limit);
+			
+		return $query->execute()->as_array();
+	}
+	
+	/** 
+	 * Returns paginated items with price
+	 * 
+	 * @param int $category_id
+	 * @param int $page
+	 * @param int $relative_date
+	 * @return array
+	 */
+	public function get_paged_price($category_id = NULL, $page = 1, $relative_date = NULL)
+	{
+		$page = (int) $page;
 		
-		return DB::query(Database::SELECT, $sql)->execute()->as_array();
+		// Pre calculate totals
+		$total_rec = $this->get_total($category_id);
+		$total_pages = $this->get_total_pages($total_rec);
+		
+		// Determine the correct page
+		if ($page < 1)
+		{
+			$page = 1;
+		}
+		
+		// Make sure the page does not exceed total pages
+		if ($page > $total_pages)
+		{
+			$page = $total_pages;
+		}
+		
+		$offset = ($page - 1) * self::ITEMS_PER_PAGE;
+		
+		if ( ! $relative_date)
+		{
+			$relative_date = time();
+		}
+		
+		if ( ! $relative_date)
+		{
+			$relative_date = time();
+		}
+		
+		// Inner query to latest price per item
+		$inner_query = DB::select('id')->from('price')
+			->where('item_id', '=', DB::expr('i.id'))
+			->where('effective_date', '<=', (int) $relative_date)
+			->order_by('effective_date', 'DESC')
+			->limit(1);
+			
+		// Outer query
+		$query = DB::select(
+				'i.id',
+				'i.name',
+				'i.description',
+				'i.category_id',
+				array('c.name', 'category_name'),
+				array('p.id', 'price_id'),
+				'p.price',
+				'p.effective_date'
+			)
+			->from(array($this->_table, 'i'))
+			->join(array('category', 'c'))
+			->on('i.category_id', '=', 'c.id')
+			->join(array('price', 'p'), 'LEFT')
+			->on('p.id', '=', $inner_query);
+			
+		// Add category filter if specified
+		if ($category_id)
+		{
+			$query->where('i.category_id', '=', (int) $category_id);
+		}
+		
+		// Finish query
+		$query->order_by('c.name', 'ASC')
+			->order_by('i.name', 'ASC')
+			->limit(self::ITEMS_PER_PAGE)
+			->offset($offset);
+			
+		return $query->execute()->as_array();
 	}
 }

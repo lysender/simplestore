@@ -6,5 +6,6 @@
 	<li><?php echo HTML::anchor('/inventory/stock', 'Stocks') ?></li>
 	<li><?php echo HTML::anchor('/inventory/restock', 'Re-stock') ?></li>
 	<li><?php echo HTML::anchor('/inventory/unstock', 'Un-stock') ?></li>
-	<li><?php echo HTML::anchor('/inventory/price', 'Pricing') ?></li>
+	<li><?php echo HTML::anchor('/inventory/price', 'Price Lookup') ?></li>
+	<li><?php echo HTML::anchor('/inventory/price/list', 'Price Masterlist') ?></li>
 </ul>

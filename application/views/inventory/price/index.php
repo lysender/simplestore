@@ -1,4 +1,4 @@
-<h1><strong>Price</strong> Management</h1>
+<h1><strong>Price</strong> Lookup</h1>
 
 <p class="menu-nav"><a href="<?php echo URL::site('/inventory') ?>">Back to Inventory</a></p>
 

@@ -27,3 +27,20 @@ legend+* { margin-top: 0; } /* we already added legend margin */
 a abbr, a acronym { text-decoration: underline; } /* IE 7 bug */
 fieldset legend { margin: 0; } /* IE 6 disappearing legend bug */
 
+/** Added by Lysender **/
+input[type='password'] {
+	font-family: sans, "courier new", courier;
+	color: #000;
+}
+/** For table cell spacing bug in IE 7 **/
+table.reg-list {
+	*border-collapse: expression('separate', cellSpacing = '1px');
+}
+/** IE does not inherit from parent tr **/
+table.reg-list thead th,
+table.reg-list tfoot th {
+	background-color: #e6EEEE;
+}
+table.reg-list tbody td {
+	background-color: #FFF;
+}

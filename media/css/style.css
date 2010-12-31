@@ -260,3 +260,13 @@ a.search-select-price {
 td.price-cell {
 	text-align: right;	
 }
+td.price-editor {
+	width: 80px;	
+}
+td.price-editor input {
+	display: none;
+	width: 80%;	
+}
+img.price-update-spinner {
+	display: none;
+}

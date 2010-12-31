@@ -98,7 +98,7 @@ var ItemPriceBoard = {
 		$.post(
 			url,
 			{
-				"item_id": item_id,
+				"item_id": item_id
 			},
 			function(data)
 			{
@@ -131,12 +131,18 @@ var ItemPriceBoard = {
 	},
 	
 	submit: function()
-	{
-		$("#submit-spinner").show();
-		
+	{	
 		var url = base_url + "inventory/price/setprice";
 		var item_id = $("#item_id").val();
 		var price = $("#price").val();
+		var effdate = $("#effective_date").val();
+		
+		if ( ! this.check_data(price, effdate))
+		{
+			return;
+		}
+	
+		$("#submit-spinner").show();
 		
 		$.post(
 			url,
@@ -161,5 +167,35 @@ var ItemPriceBoard = {
 			},
 			"json"
 		);
+	},
+	
+	check_data: function(price, effdate)
+	{
+		price = price + "";
+		effdate = effdate + "";
+		
+		// Check for price
+		var price_regex = /^[0-9]+(\.[0-9][0-9])?$/;
+		var date_regex = /^201[0-9]-[01][0-9]-[0123][0-9]$/;
+		
+		// Test price
+		if ( ! price_regex.test(price))
+		{
+			alert("Invalid price format");
+			$("#price").focus();
+			
+			return false;
+		}
+		
+		// Test date (very minimal)
+		if ( ! date_regex.test(effdate))
+		{
+			alert("Invalid date format");
+			$("#effective_date").focus();
+			
+			return false;
+		}
+		
+		return true;
 	}
 };

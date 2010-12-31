@@ -14,7 +14,7 @@ class Controller_Inventory_Price extends Controller_Site
 	 */
 	public function action_index()
 	{
-		$this->template->title = 'Pricing';
+		$this->template->title = 'Price Lookup';
 		$this->template->scripts[] = 'media/js/item-price.js';
 		
 		$this->view = View::factory('inventory/price/index');
@@ -165,6 +165,54 @@ class Controller_Inventory_Price extends Controller_Site
 		
 		$this->request->headers['Content-type'] = 'application/json';
 		$this->request->response = json_encode($result);
+	}
+	
+	/** 
+	 * Price masterlist
+	 * 
+	 */
+	public function action_list()
+	{
+		$this->template->title = 'Price Masterlist';
+		$this->template->styles['media/css/pagination.css'] = 'projection, screen';
+		$this->template->scripts[] = 'media/js/price-list.js';
+		$this->view = View::factory('inventory/price/list');
+		
+		$category_id = (int) $this->request->param('id');
+		$page = (int) $this->request->param('param2', 1);
+		
+		if ( ! $page)
+		{
+			$page = 1;
+		}
+		
+		$item = Sprig::factory('item');
+		
+		$this->view->current_page = $page;
+		$this->view->selected_category = $category_id;
+		$this->view->items = $item->get_paged_price($category_id, $page);
+		
+		// Load categories
+		$categories = Sprig::factory('category')->select_list('id', 'name');
+
+		// To view
+		$this->view->categories = Arr::merge(array('' => 'All'), $categories);
+		
+		// Pagination
+		$paginate = new Dc_Paginate;
+		
+		if ($category_id)
+		{
+			$paginate->verbose_first_page = TRUE;
+		}
+		
+		$this->view->paginator = $paginate->render(
+			('/inventory/price/list/'.$category_id),
+			('/inventory/price/list/'.$category_id.'/'),
+			$item->get_total(),
+			Model_Item::ITEMS_PER_PAGE,
+			$page
+		);
 	}
 	
 	/** 

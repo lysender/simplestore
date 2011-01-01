@@ -266,6 +266,8 @@ td.price-editor {
 td.price-editor input {
 	display: none;
 	width: 80%;	
+	text-align: right;
+	padding-right: 2px;
 }
 img.price-update-spinner {
 	display: none;

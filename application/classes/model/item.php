@@ -71,7 +71,7 @@ class Model_Item extends Sprig
 			'description' => new Sprig_Field_Text(array(
 				'empty' => TRUE,
 				'label' => 'Description',
-				'min_length' => 5,
+				'min_length' => 3,
 				'max_length' => 256,
 				'attributes' => array(
 					'id' => 'description'
@@ -322,15 +322,19 @@ class Model_Item extends Sprig
 				'i.name',
 				'i.description',
 				'i.category_id',
+				array('c.name', 'category_name'),
 				array('p.id', 'price_id'),
 				'p.price',
 				'p.effective_date'
 			)
 			->from(array($this->_table, 'i'))
+			->join(array('category', 'c'))
+			->on('i.category_id', '=', 'c.id')
 			->join(array('price', 'p'), 'LEFT')
 			->on('p.id', '=', $inner_query)
 			->where('i.name', 'LIKE', '%'.$keyword.'%')
 			->or_where('i.description', 'LIKE', '%'.$keyword.'%')
+			->order_by('c.name', 'ASC')
 			->order_by('i.name', 'ASC')
 			->limit($limit);
 			

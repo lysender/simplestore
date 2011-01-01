@@ -144,6 +144,8 @@ var ItemPriceBoard = {
 	
 		$("#submit-spinner").show();
 		
+		price = this.format_price(price);
+
 		$.post(
 			url,
 			{
@@ -197,5 +199,18 @@ var ItemPriceBoard = {
 		}
 		
 		return true;
+	},
+
+	format_price: function(price)
+	{
+		var chunks = price.split(".");
+
+		if (chunks.length < 2)
+		{
+			// Add two decimal places
+			price = price + ".00";
+		}
+
+		return price;
 	}
 };

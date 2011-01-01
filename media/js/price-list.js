@@ -103,6 +103,9 @@ var PriceCell = {
 			return;
 		}
 		
+		// Format price
+		price = this.format_price(price);
+
 		// Show spinner
 		$("#price-update-spinner-" + id).show();
 		
@@ -155,5 +158,18 @@ var PriceCell = {
 		}
 		
 		return true;
+	},
+
+	format_price: function(price)
+	{
+		var chunks = price.split(".");
+
+		if (chunks.length < 2)
+		{
+			// Add two decimal places
+			price = price + ".00";
+		}
+
+		return price;
 	}
 };

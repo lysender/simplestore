@@ -173,10 +173,15 @@ class Controller_Inventory_Price extends Controller_Site
 	 */
 	public function action_list()
 	{
+		$this->view = View::factory('inventory/price/list');
+
 		$this->template->title = 'Price Masterlist';
 		$this->template->styles['media/css/pagination.css'] = 'projection, screen';
 		$this->template->scripts[] = 'media/js/price-list.js';
-		$this->view = View::factory('inventory/price/list');
+		$this->template->scripts[] = 'media/js/jquery.tablesorter.min.js';
+		$this->template->head_readyscripts .= '
+			$(".reg-list").tablesorter({widgets: ["zebra"]});
+		';
 		
 		$category_id = (int) $this->request->param('id');
 		$page = (int) $this->request->param('param2', 1);
@@ -230,6 +235,7 @@ class Controller_Inventory_Price extends Controller_Site
 			$class = ($key % 2 == 0) ? 'even' : 'odd';
 			$s .= '<tr class="'.$class.'" id="pricerow-'.$row['id'].'">'
 					.'<td><a class="search-select-price" href="#" id="sel-'.$row['id'].'" title="Select item">Select price</a></td>'
+					.'<td>'.HTML::chars($row['category_name']).'</td>'
 					.'<td>'.HTML::chars($row['name']).'</td>'
 					.'<td>'.HTML::chars($row['description']).'&nbsp;</td>'
 					.'<td class="price-cell">'.$row['price'].'&nbsp;</td>'

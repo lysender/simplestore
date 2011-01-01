@@ -51,3 +51,9 @@
 		</tbody>
 	</table>
 </div>
+
+<?php if (isset($paginator) && $paginator): ?>
+<div class="span-24">
+	<?php echo $paginator ?>
+</div>
+<?php endif ?>

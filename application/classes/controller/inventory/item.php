@@ -94,6 +94,17 @@ class Controller_Inventory_Item extends Controller_Site
 		$this->template->styles['media/css/pagination.css'] = 'screen, projection';
 		$this->template->scripts[] = 'media/js/crud.js';
 		$this->template->scripts[] = 'media/js/itemlist.js';
+		$this->template->scripts[] = 'media/js/jquery.tablesorter.min.js';
+
+		$this->template->head_readyscripts .= '
+			$(".reg-list").tablesorter({
+				widgets: ["zebra"],
+				headers: {
+					0: {sorter: false},
+					4: {sorter: false}
+				}
+			});
+		';
 		
 		$item = Sprig::factory('item');
 		

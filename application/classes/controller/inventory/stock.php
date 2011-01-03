@@ -27,4 +27,14 @@ class Controller_Inventory_Stock extends Controller_Site
 		
 		$this->view->stocks = $stock->get_paged($page);
 	}
+	
+	/** 
+	 * Add to stock page
+	 * 
+	 */
+	public function action_add()
+	{
+		$this->template->title = 'Stock - Add';
+		$this->view = View::factory('inventory/stock/add');
+	}
 }

@@ -43,22 +43,6 @@ class Model_Item extends Sprig
 					'id' => 'category'
 				)
 			)),
-			'code_name' => new Sprig_Field_Char(array(
-				'unique' => TRUE,
-				'null' => TRUE,
-				'label' => 'Code name',
-				'min_length' => 3,
-				'max_length' => 16,
-				'rules' => array(
-					'alpha_dash' => NULL
-				),
-				'attributes' => array(
-					'id' => 'code_name'
-				),
-				'callbacks' => array(
-					'generate_codename' => array($this, 'generate_codename')
-				)
-			)),
 			'name' => new Sprig_Field_Char(array(
 				'unique' => TRUE,
 				'label' => 'Name',
@@ -88,31 +72,6 @@ class Model_Item extends Sprig
 				'null' => TRUE
 			))
 		);
-	}
-	
-	/** 
-	 * Callback filter for generating codename
-	 * 
-	 * @param Validate $array
-	 * @param string $field
-	 */
-	public function generate_codename(Validate $array, $field)
-	{
-		// Check if code_name has content
-		$code_name = $array[$field];
-		
-		if ( ! $code_name)
-		{
-			// Generate from item name
-			$name = isset($array['name']) ? $array['name'] : NULL;
-
-			if ($name)
-			{
-				$code_name = strtoupper(preg_replace('/[^-a-zA-Z0-9]/', '', $name));
-			}
-		}
-		
-		$array[$field] = Text::limit_chars($code_name, 16);
 	}
 	
 	/**
@@ -171,7 +130,6 @@ class Model_Item extends Sprig
 				'i.id',
 				'i.category_id', 
 				array('c.name', 'category_name'),
-				'i.code_name',
 				'i.name',
 				'i.description'
 			)
@@ -225,7 +183,6 @@ class Model_Item extends Sprig
 				'i.id',
 				'i.category_id', 
 				array('c.name', 'category_name'),
-				'i.code_name',
 				'i.name',
 				'i.description'
 			)
@@ -334,9 +291,12 @@ class Model_Item extends Sprig
 			->on('p.id', '=', $inner_query)
 			->where('i.name', 'LIKE', '%'.$keyword.'%')
 			->or_where('i.description', 'LIKE', '%'.$keyword.'%')
+			->or_where('c.name', 'LIKE', '%'.$keyword.'%')
 			->order_by('c.name', 'ASC')
 			->order_by('i.name', 'ASC')
 			->limit($limit);
+		
+		Kohana::$log->add(Kohana::DEBUG, (string) $query);
 			
 		return $query->execute()->as_array();
 	}

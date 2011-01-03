@@ -10,9 +10,6 @@
 		<div class="span-3"><?php echo $item->label('category') ?></div>
 		<div class="span-10 last"><?php echo $item->input('category') ?></div>
 			
-		<div class="span-3"><?php echo $item->label('code_name') ?></div>
-		<div class="span-10 last"><?php echo $item->input('code_name') ?></div>
-			
 		<div class="span-3"><?php echo $item->label('name') ?></div>
 		<div class="span-10 last"><?php echo $item->input('name') ?></div>
 		

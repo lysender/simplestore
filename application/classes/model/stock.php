@@ -116,7 +116,6 @@ class Model_Stock extends Sprig
 				'i.id',
 				'i.category_id', 
 				array('c.name', 'category_name'),
-				'i.code_name',
 				'i.name',
 				'i.description'
 			)
@@ -171,7 +170,6 @@ class Model_Stock extends Sprig
 				's.item_id',
 				'i.category_id', 
 				array('c.name', 'category_name'),
-				'i.code_name',
 				'i.name',
 				'i.description'
 			)

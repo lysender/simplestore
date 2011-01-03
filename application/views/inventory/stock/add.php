@@ -1,6 +1,6 @@
 <h1><strong>Add</strong> Item</h1>
 
-<p class="menu-nav"><a href="<?php echo URL::site('/inventory/item/index/'.$selected_category.'/'.$current_page) ?>">Back to items</a></p>
+<p class="menu-nav"><a href="<?php echo URL::site('/inventory/stock/index/'.$selected_category.'/'.$current_page) ?>">Back to items</a></p>
 
 <div id="form-wrapper" class="span-14 last">
 	<?php if (isset($error_message) && $error_message): ?>

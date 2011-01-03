@@ -5,8 +5,8 @@
  *
  * @package    Kohana/Auth
  * @author     Kohana Team
- * @copyright  (c) 2007-2009 Kohana Team
- * @license    http://kohanaphp.com/license.html
+ * @copyright  (c) 2007-2010 Kohana Team
+ * @license    http://kohanaframework.org/license
  */
 abstract class Kohana_Auth {
 
@@ -87,31 +87,6 @@ abstract class Kohana_Auth {
 		return $this->_session->get($this->_config['session_key'], FALSE);
 	}
 
-	/** 
-	 * Returns the currently logged user
-	 * 
-	 * @return array
-	 */
-	public function get_userdata()
-	{
-		$identity = $this->get_user();
-		
-		if ($identity)
-		{
-			$user = Sprig::factory('user')->load_user($identity);
-			
-			if ($user->loaded())
-			{
-				$userdata = $user->as_array();
-				unsert($userdata['password']);
-				
-				return $userdata;
-			}
-		}
-		
-		return FALSE;
-	}
-	
 	/**
 	 * Attempt to log in a user by using an ORM object and plain-text password.
 	 *

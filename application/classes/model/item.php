@@ -296,7 +296,7 @@ class Model_Item extends Sprig
 			->order_by('i.name', 'ASC')
 			->limit($limit);
 		
-		Kohana::$log->add(Kohana::DEBUG, (string) $query);
+		// Kohana::$log->add(Kohana::DEBUG, (string) $query);
 			
 		return $query->execute()->as_array();
 	}

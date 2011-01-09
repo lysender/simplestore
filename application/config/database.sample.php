@@ -19,7 +19,7 @@ return array
 			 */
 			'dsn'		 => 'mysql:host=localhost;dbname=simplestore',
 			'username'   => 'simplestore',
-			'password'   => '$1mple$t0re',
+			'password'   => 'simplestore',
 			'persistent' => FALSE,
 		),
 		'table_prefix' => '',
@@ -44,7 +44,7 @@ return array
 			 */
 			'dsn'		 => 'mysql:host=localhost;dbname=simplestore',
 			'username'   => 'simplestore',
-			'password'   => '$1mple$t0re',
+			'password'   => 'simplestore',
 			'persistent' => FALSE,
 		),
 		'table_prefix' => '',
@@ -69,7 +69,7 @@ return array
 			 */
 			'dsn'		 => 'mysql:host=localhost;dbname=simplestore',
 			'username'   => 'simplestore',
-			'password'   => '$1mple$t0re',
+			'password'   => 'simplestore',
 			'persistent' => FALSE,
 		),
 		'table_prefix' => '',
@@ -94,7 +94,7 @@ return array
 			 */
 			'dsn'		 => 'mysql:host=localhost;dbname=simplestore',
 			'username'   => 'simplestore',
-			'password'   => '$1mple$t0re',
+			'password'   => 'simplestore',
 			'persistent' => FALSE,
 		),
 		'table_prefix' => '',

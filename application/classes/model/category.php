@@ -23,7 +23,7 @@ class Model_Category extends Sprig
 				'empty' => TRUE,
 				'label' => 'Description',
 				'min_length' => 5,
-				'max_length' => 256,
+				'max_length' => 128,
 				'attributes' => array(
 					'id' => 'description'
 				)

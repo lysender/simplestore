@@ -141,6 +141,7 @@ class Controller_Inventory_Item extends Controller_Site
 	{
 		$this->view = View::factory('inventory/item/add');
 		$this->template->title = 'Item - Add';
+		$this->template->scripts[] = 'media/js/item-search.js';
 		
 		$item = Sprig::factory('item');
 		$csrf_check = TRUE;
@@ -196,6 +197,7 @@ class Controller_Inventory_Item extends Controller_Site
 	{
 		$this->view = View::factory('inventory/item/edit');
 		$this->template->title = 'Item - Edit';
+		$this->template->scripts[] = 'media/js/item-search.js';
 		
 		$csrf_check = TRUE;
 		
@@ -284,5 +286,59 @@ class Controller_Inventory_Item extends Controller_Site
 			
 			$this->request->redirect('/inventory/item/index/'.$this->_category_id.'/'.$this->_page);
 		}
+	}
+	
+	/** 
+	 * Ajax post item search
+	 * 
+	 */
+	public function action_search()
+	{
+		$this->auto_render = FALSE;
+		
+		$result = array(
+			'success' => FALSE,
+			'content' => NULL
+		);
+		
+		$keyword = Arr::get($_POST, 'keyword');
+		
+		// Ensure that only POST request is accepted
+		if (Request::$method == 'POST' && $keyword)
+		{
+			$searched = Sprig::factory('item')->search($keyword);
+			
+			if ( ! empty($searched))
+			{
+				$result['success'] = 1;
+				$result['content'] = $this->_searched_to_html($searched);
+			}
+		}
+		
+		$this->request->headers['Content-type'] = 'application/json';
+		$this->request->response = json_encode($result);
+	}
+	
+	/** 
+	 * Convertes searched items into html tr's
+	 * 
+	 * @param array $searched
+	 * @return string
+	 */
+	protected function _searched_to_html(array $searched)
+	{
+		$s = '';
+		
+		foreach ($searched as $key => $row)
+		{
+			$class = ($key % 2 == 0) ? 'even' : 'odd';
+			$s .= '<tr class="'.$class.'">'
+					.'<td>'.HTML::chars($row['category_name']).'</td>'
+					.'<td>'.HTML::chars($row['name']).'</td>'
+					.'<td>'.HTML::chars($row['description']).'&nbsp;</td>'
+				 .'</tr>';
+		}
+		
+		return $s;
 	}
 }

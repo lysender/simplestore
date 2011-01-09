@@ -56,7 +56,7 @@ class Model_Item extends Sprig
 				'empty' => TRUE,
 				'label' => 'Description',
 				'min_length' => 3,
-				'max_length' => 256,
+				'max_length' => 128,
 				'attributes' => array(
 					'id' => 'description'
 				)
@@ -251,6 +251,42 @@ class Model_Item extends Sprig
 		}
 		
 		return 1;
+	}
+	
+	/**
+	 * Returns items via keyword search
+	 *
+	 * @param string $keyword
+	 * @param int $limit
+	 * @return array
+	 */
+	public function search($keyword, $limit = 10)
+	{
+		$result = DB::select(
+				'i.id',
+				'i.category_id', 
+				array('c.name', 'category_name'),
+				'i.name',
+				'i.description'
+			)
+			->from(array($this->_table, 'i'))
+			->join(array('category', 'c'))
+			->on('i.category_id', '=', 'c.id')
+			->where('i.name', 'LIKE', '%'.$keyword.'%')
+			->or_where('i.description', 'LIKE', '%'.$keyword.'%')
+			->or_where('c.name', 'LIKE', '%'.$keyword.'%')
+			->order_by('c.name', 'ASC')
+			->order_by('i.name', 'ASC')
+			->limit( (int) $limit)
+			->execute()
+			->as_array();
+		
+		if ( ! empty($result))
+		{
+			return $result;
+		}
+		
+		return FALSE;
 	}
 	
 	/** 
